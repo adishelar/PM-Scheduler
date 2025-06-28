@@ -11,14 +11,14 @@ function App() {
     const departments = ['A', 'B', 'C', 'D'];
 
     useEffect(() => {
-        axios.get('http://https://pm-scheduler.onrender.com/api/employees')
+        axios.get('http://pm-scheduler.onrender.com/api/employees')
             .then(res => setEmployees(res.data))
             .catch(err => console.error(err));
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://https://pm-scheduler.onrender.com/api/employees', form)
+        axios.post('http://pm-scheduler.onrender.com/api/employees', form)
             .then(res => {
                 setEmployees([...employees, res.data]);
                 setForm({ name: '', department: '' });
@@ -27,7 +27,7 @@ function App() {
     };
 
     const handleUpdate = (id, status, feedback) => {
-        axios.put(`http://https://pm-scheduler.onrender.com/api/employees/${id}`, { status, feedback })
+        axios.put(`http://pm-scheduler.onrender.com/api/employees/${id}`, { status, feedback })
             .then(res => {
                 setEmployees(
                     employees.map(emp => emp.id === id ? res.data : emp)
@@ -37,7 +37,7 @@ function App() {
     };
 
     const downloadPdf = () => {
-        axios.get('http://https://pm-scheduler.onrender.com/api/employees/pdf', {
+        axios.get('http://pm-scheduler.onrender.com/api/employees/pdf', {
             responseType: 'blob',
             headers: { role: role } // Sending role to backend
         })
