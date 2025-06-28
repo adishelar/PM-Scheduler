@@ -1,0 +1,99 @@
+package com.PM_scheduler.Service;
+
+
+
+
+
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.PM_scheduler.Enitity.Employee;
+import com.PM_scheduler.Repo.EmployeeRepository;
+
+@Service
+public class EmployeeService {
+
+	 @Autowired
+	    private EmployeeRepository repo;
+
+	    private Map<String, Integer> machineAssignments = new HashMap<>();
+
+	    private Map<String, String[]> departmentMachines = Map.of(
+	        "A", new String[]{"A1","A2","A3","A4","A5","A6","A7","A8","A9","A10"},
+	        "B", new String[]{"B1","B2","B3","B4","B5","B6","B7","B8","B9","B10"},
+	        "C", new String[]{"C1","C2","C3","C4","C5","C6","C7","C8","C9","C10"},
+	        "D", new String[]{"D1","D2","D3","D4","D5","D6","D7","D8","D9","D10"}
+	    );
+
+	    public EmployeeService() {
+	        machineAssignments.put("A", 0);
+	        machineAssignments.put("B", 0);
+	        machineAssignments.put("C", 0);
+	        machineAssignments.put("D", 0);
+	    }
+
+	    public Employee addEmployee(Employee e) {
+	        String[] machines = departmentMachines.get(e.getDepartment());
+	        int index = machineAssignments.get(e.getDepartment());
+	        e.setMachine(machines[index]);
+	        machineAssignments.put(e.getDepartment(), (index + 1) % machines.length);
+	        return repo.save(e);
+	    }
+
+	    public Employee updateEmployee(String id, String status, String feedback) {
+	        Employee e = repo.findById(id).orElse(null);
+	        if (e != null) {
+	            e.setStatus(status);
+	            e.setFeedback(feedback);
+	            return repo.save(e);
+	        }
+	        return null;
+	    }
+
+	    public List<Employee> getAll() {
+	        return repo.findAll();
+	    }
+
+	    public byte[] generateSimplePdf() {
+	        try (PDDocument document = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+	            PDPage page = new PDPage(PDRectangle.A4);
+	            document.addPage(page);
+
+	            PDPageContentStream content = new PDPageContentStream(document, page);
+	            content.beginText();
+	            content.setFont(PDType1Font.HELVETICA_BOLD, 12);
+	            content.newLineAtOffset(50, 750);
+	            content.showText("Employee Report");
+	            content.endText();
+
+	            int y = 730;
+	            content.setFont(PDType1Font.HELVETICA, 10);
+
+	            for (Employee e : getAll()) {
+	                y -= 15;
+	                if (y < 50) break;
+	                content.beginText();
+	                content.newLineAtOffset(50, y);
+	                String line = e.getName() + " | " + e.getDepartment() + " | " + e.getMachine() + " | " + e.getStatus();
+	                content.showText(line);
+	                content.endText();
+	            }
+
+	            content.close();
+	            document.save(output);
+	            return output.toByteArray();
+
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	            return new byte[0];
+	        }
+	    }
+		
+		
+	    
+}

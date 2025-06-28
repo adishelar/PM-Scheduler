@@ -1,0 +1,41 @@
+package com.PM_scheduler.Controller;
+
+
+	@RestController
+	@RequestMapping("/api/employees")
+	@CrossOrigin
+	public class EmployeeController {
+
+	    @Autowired
+	    private EmployeeService service;
+
+	    @PostMapping
+	    public ResponseEntity<Employee> add(@RequestBody Employee e) {
+	        Employee saved = service.addEmployee(e);
+	        return ResponseEntity.status(201).body(saved);
+	    }
+
+	    @PutMapping("/{id}")
+	    public ResponseEntity<?> update(@PathVariable String id, @RequestBody Map<String, String> body) {
+	        Employee updated = service.updateEmployee(id, body.get("status"), body.get("feedback"));
+	        if (updated != null) {
+	            return ResponseEntity.ok(updated);
+	        } else {
+	            return ResponseEntity.status(404).body("Employee Not Found");
+	        }
+	    }
+
+	    @GetMapping
+	    public ResponseEntity<List<Employee>> all() {
+	        return ResponseEntity.ok(service.getAll());
+	    }
+
+	    @GetMapping("/pdf")
+	    public ResponseEntity<byte[]> pdf() {
+	        byte[] pdfData = service.generateSimplePdf();
+	        return ResponseEntity.ok()
+	                .header("Content-Disposition", "attachment; filename=employees.pdf")
+	                .body(pdfData);
+	    }
+
+}

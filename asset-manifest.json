@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/frontend-scheduler/static/css/main.6c3c1fdf.css",
+    "main.js": "/frontend-scheduler/static/js/main.a169a8d2.js",
+    "static/js/453.1100b402.chunk.js": "/frontend-scheduler/static/js/453.1100b402.chunk.js",
+    "index.html": "/frontend-scheduler/index.html",
+    "main.6c3c1fdf.css.map": "/frontend-scheduler/static/css/main.6c3c1fdf.css.map",
+    "main.a169a8d2.js.map": "/frontend-scheduler/static/js/main.a169a8d2.js.map",
+    "453.1100b402.chunk.js.map": "/frontend-scheduler/static/js/453.1100b402.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6c3c1fdf.css",
+    "static/js/main.a169a8d2.js"
+  ]
+}
