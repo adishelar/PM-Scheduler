@@ -47,6 +47,10 @@ int index=machineAssignments.get(e.getDepartment());
 // set machine to employee
 e.setMachine(machines[index]);
 // update index 
+    /*index+1 is used for increasing index by one ,but suppose if it reaches to and of machine no
+    it will become array out of bound ex.if dept has 10 machines that means 0 to 9 so after 
+    last machine that is 9 it will index will become 10 and it is invalid ,so i use percentage to make a loop and comes back to
+        0 ex.index =9,machine length is 10 thus (9+1)%*10=0 */
 machineAssignments.put(e.getDepartment(),(index+1)%machines.length);
 // saving to DB
 return repo.save(e);
